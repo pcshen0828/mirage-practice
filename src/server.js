@@ -1,8 +1,22 @@
 // Welcome to the tutorial!
-import { belongsTo, createServer, hasMany, Model } from "miragejs";
+import {
+  belongsTo,
+  createServer,
+  hasMany,
+  Model,
+  RestSerializer,
+} from "miragejs";
 
 export default function makeServer() {
   createServer({
+    // transform JSON payloads
+    serializers: {
+      reminder: RestSerializer.extend({
+        include: ["list"], // every time it encounters a Reminder model in the response of a route handler, it should include its associated List (if it has one).
+        embed: true, // tells Mirage how to serialize the included resources
+      }),
+    },
+
     models: {
       list: Model.extend({
         // association helpers

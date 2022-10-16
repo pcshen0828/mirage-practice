@@ -12,11 +12,11 @@ export default function makeServer() {
         ],
       }));
 
-      this.post('/api/reminders', (schema, request) => {
-        let attrs = JSON.parse(request.requestBody)
-        console.log(attrs)
-        debugger
-      })
+      this.post("/api/reminders", (schema, request) => {
+        let attrs = JSON.parse(request.requestBody);
+        console.log(attrs);
+        debugger;
+      });
     },
   });
 }

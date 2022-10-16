@@ -59,3 +59,10 @@ test("it can add a reminder to a list", async () => {
   expect(server.db.reminders.length).toEqual(1);
   expect(server.db.reminders[0].listId).toEqual(list.id);
 });
+
+// #TODO
+// The All screen shows all Reminders, along with tags showing which List they belong to
+// A List only shows Reminders that belong to that List
+// The user can delete a Reminder
+// The user can create a List
+// The user can delete a List

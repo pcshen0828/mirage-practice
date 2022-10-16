@@ -94,10 +94,25 @@ export default function makeServer(environment = "development") {
         return list.reminders;
       });
 
+      this.post("/api/lists", (schema, request) => {
+        let attrs = JSON.parse(request.requestBody);
+        console.log(attrs);
+        return schema.lists.create(attrs);
+      });
+
       this.post("/api/reminders", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
         console.log(attrs); // When we defined our relationship, Mirage set up special attributes on our models known as foreign keys
         return schema.reminders.create(attrs);
+      });
+
+      this.delete("/api/lists/:id", (schema, request) => {
+        let { id } = request.params;
+        const list = schema.lists.find(id);
+        // clear the reminders of the removed list
+        list.reminders.destroy();
+
+        return list.destroy();
       });
 
       this.delete("api/reminders/:id", (schema, request) => {

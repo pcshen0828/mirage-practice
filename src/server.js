@@ -9,8 +9,9 @@ import {
   trait,
 } from "miragejs";
 
-export default function makeServer() {
-  createServer({
+export default function makeServer(environment = "development") {
+  return createServer({
+    environment,
     // transform JSON payloads
     serializers: {
       reminder: RestSerializer.extend({

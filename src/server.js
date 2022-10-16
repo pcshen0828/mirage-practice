@@ -2,9 +2,11 @@
 import {
   belongsTo,
   createServer,
+  Factory,
   hasMany,
   Model,
   RestSerializer,
+  trait,
 } from "miragejs";
 
 export default function makeServer() {
@@ -28,18 +30,50 @@ export default function makeServer() {
       }),
     },
 
+    factories: {
+      list: Factory.extend({
+        name(i) {
+          return `List ${i}`;
+        },
+        // Use Traits to group related attribute and afterCreate logic, and to keep your factories composable
+        withReminders: trait({
+          // perform additional logic, like automatically creating related data for a model
+          afterCreate(list, server) {
+            server.createList("reminder", 5, { list });
+          },
+        }),
+      }),
+
+      reminder: Factory.extend({
+        // text: 'Reminder text'
+        text(i) {
+          return `Reminder ${i}`;
+        },
+      }),
+    },
+
     // seed Mirage with some initial data
     seeds(server) {
       // create new reminders in Mirage's data layer
       // IDs are automatically assigned
-      server.create("reminder", { text: "Walk the dog" });
-      server.create("reminder", { text: "Take out the trash" });
-      server.create("reminder", { text: "Work out" });
+      // server.create("reminder", { text: "Walk the dog" });
+      // server.create("reminder", { text: "Take out the trash" });
+      // server.create("reminder", { text: "Work out" });
 
-      const homeList = server.create("list", { name: "Home" });
-      const workList = server.create("list", { name: "Work" });
-      server.create("reminder", { list: homeList, text: "Buy groceries" });
-      server.create("reminder", { list: workList, text: "Research mirage" });
+      // const homeList = server.create("list", { name: "Home" });
+      // const workList = server.create("list", { name: "Work" });
+      // server.create("reminder", { list: homeList, text: "Buy groceries" });
+      // server.create("reminder", { list: workList, text: "Research mirage" });
+
+      // server.create("reminder");
+      // server.create("list", {
+      //   reminders: server.createList("reminder", 5),
+      // });
+      server.create("list", {
+        name: "Home",
+        reminders: [server.create("reminder", { text: "Do yoga" })],
+      });
+      server.create("list", "withReminders");
     },
 
     routes() {
